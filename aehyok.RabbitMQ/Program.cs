@@ -1,2 +1,18 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+using aehyok.RabbitMQ;
+using RabbitMQ.Client;
+using System.Text;
+
+//HelloWorld.Run();
+
+FanoutCF.Subscrber();
+//FanoutCF.Publish();
+
+
+Console.WriteLine("Hello, End!");
+
+
+
+
+Console.ReadLine();
+
