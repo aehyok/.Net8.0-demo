@@ -2,8 +2,8 @@
 using aehyok.RabbitMQ;
 
 //HelloWorld.Run();
-FanoutCF.Subscrber();
-FanoutCF.Publish();
+//FanoutCF.Subscrber();
+//FanoutCF.Publish();
 
 Console.WriteLine("Hello, End!");
 

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Schedules", "aehyok.Schedules\aehyok.Schedules.csproj", "{CD2F5ED2-06D4-4BA6-8CF2-A77E08408EB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Schedules", "aehyok.Schedules\aehyok.Schedules.csproj", "{CD2F5ED2-06D4-4BA6-8CF2-A77E08408EB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.RabbitMQ", "aehyok.RabbitMQ\aehyok.RabbitMQ.csproj", "{9F797E1A-4D68-41E4-8DDF-FC16946EB05F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.RabbitMQ", "aehyok.RabbitMQ\aehyok.RabbitMQ.csproj", "{9F797E1A-4D68-41E4-8DDF-FC16946EB05F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Infrastructure", "aehyok.Infrastructure\aehyok.Infrastructure.csproj", "{5C1256DA-06DC-45C2-85DE-B17B9B692B88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9F797E1A-4D68-41E4-8DDF-FC16946EB05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F797E1A-4D68-41E4-8DDF-FC16946EB05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F797E1A-4D68-41E4-8DDF-FC16946EB05F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C1256DA-06DC-45C2-85DE-B17B9B692B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C1256DA-06DC-45C2-85DE-B17B9B692B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C1256DA-06DC-45C2-85DE-B17B9B692B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C1256DA-06DC-45C2-85DE-B17B9B692B88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

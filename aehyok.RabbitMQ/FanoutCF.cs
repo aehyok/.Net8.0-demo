@@ -1,42 +1,30 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace aehyok.RabbitMQ
 {
-    public class FanoutCF
+    public class FanoutCF: ICF
     {
-        public static IConnection CreateConnection()
+        private readonly IRabbitMQConnection connection;
+        public FanoutCF(IRabbitMQConnection connection)
         {
-            var factory = new ConnectionFactory
-            {
-                HostName = "101.200.243.192",
-                Port = 5672,
-                DispatchConsumersAsync = true,  //如果使用AsyncEventingBasicConsumer,
-                UserName = "lqm",
-                Password = "sunlight",
-                VirtualHost = "lqm_virtual"  //虚拟主机，要在服务器上创建，如果不创建，默认使用"/"，但是不建议使用"/"，因为"/"会和默认的vhost冲突
-            };
-
-            // 使用工厂创建连接
-            var connection = factory.CreateConnection("aehyok");
-            return connection;
+            this.connection = connection;
         }
 
-        public static void Publish()
+        public void Publish()
         {
-            var connection = CreateConnection();
             // 创建信道
-            using var channel = connection.CreateModel();
+            using var channel = this.connection.CreateModel();
 
             // 参数autoDelete: false 默认为false，true表示当没有消费者的时候自动删除
             channel.ExchangeDeclare("sun", ExchangeType.Fanout,durable:true);
-
-
 
             foreach (var index in Enumerable.Range(0, 100))
             {
@@ -45,14 +33,11 @@ namespace aehyok.RabbitMQ
                 channel.BasicPublish(exchange: "sun", routingKey: string.Empty, basicProperties: null, body: body);
             }
 
-            channel.Close();
-            connection.Close();
         }
 
-        public static void Subscrber()
+        public void Subscrber()
         {
-            var connection = CreateConnection();
-            var channel = connection.CreateModel();
+            var channel = this.connection.CreateModel();
 
             channel.QueueDeclare(queue: "sunlight", true, false, false);
             channel.QueueBind(queue: "sunlight", exchange: "sun", routingKey: string.Empty, arguments: null);
