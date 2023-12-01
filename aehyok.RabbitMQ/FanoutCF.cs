@@ -14,8 +14,8 @@ namespace aehyok.RabbitMQ
         {
             var factory = new ConnectionFactory
             {
-                HostName = "localhost",
-                Port = 5566,
+                HostName = "101.200.243.192",
+                Port = 5672,
                 DispatchConsumersAsync = true,  //如果使用AsyncEventingBasicConsumer,
                 UserName = "lqm",
                 Password = "sunlight",
