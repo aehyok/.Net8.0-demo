@@ -13,7 +13,7 @@ namespace aehyok.Schedules
     /// <summary>
     /// 实现一个后台服务
     /// </summary>
-    public class CronScheduleService: BackgroundService
+    public abstract class CronScheduleService: BackgroundService
     {
         /// <summary>
         /// 定时表达式
@@ -25,6 +25,8 @@ namespace aehyok.Schedules
         {
             return  CronExpression.Parse(Expression, CronFormat.IncludeSeconds).GetNextOccurrence(DateTime.UtcNow, TimeZoneInfo.Local);
         }
+
+        protected abstract Task ProcessAsync(CancellationToken cancellationToken);
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -53,6 +55,7 @@ namespace aehyok.Schedules
                 {
                     stopwatch.Restart();
                     Console.WriteLine("开始执行任务");
+                    await ProcessAsync(stoppingToken);
                     Console.WriteLine($"任务执行时间:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
                     Console.WriteLine("任务执行完成");
                 }

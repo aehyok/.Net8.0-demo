@@ -24,15 +24,16 @@ builder.Services.AddScoped<ICF, FanoutCF>();
 var icf = builder.Services.BuildServiceProvider().GetRequiredService<ICF>();
 
 
-icf.Subscrber();
-icf.Publish();
-//var host = Host.CreateDefaultBuilder(args)
-//            .ConfigureServices((context, services) =>
-//            {
-//                //注册后台服务
-//                services.AddHostedService<CronScheduleService>();
-//            })
-//            .Build();
+//icf.Subscrber();
+//icf.Publish();
 
-//// 运行主机
-//await host.RunAsync();
+var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
+            {
+                //注册后台服务
+                services.AddHostedService<SelfReportSchedule>();
+            })
+            .Build();
+
+// 运行主机
+await host.RunAsync();
