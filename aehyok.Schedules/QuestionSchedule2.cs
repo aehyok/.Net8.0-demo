@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace aehyok.Schedules
 {
-    public class SelfReportSchedule : CronScheduleService
+    public class QuestionSchedule2 : CronScheduleService
     {
         /// <summary>
         /// 
@@ -23,7 +23,7 @@ namespace aehyok.Schedules
         protected override Task ProcessAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine(this.Expression, "表达式");
-            Console.WriteLine("实现自主填报的功能");
+            Console.WriteLine("实现调查问卷的功能");
             return Task.CompletedTask;
         }
     }

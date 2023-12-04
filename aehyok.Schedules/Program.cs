@@ -32,6 +32,7 @@ var host = Host.CreateDefaultBuilder(args)
             {
                 //注册后台服务
                 services.AddHostedService<SelfReportSchedule>();
+                services.AddHostedService<QuestionSchedule2>();
             })
             .Build();
 
