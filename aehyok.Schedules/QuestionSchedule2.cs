@@ -18,7 +18,7 @@ namespace aehyok.Schedules
         //        return "";
         //    }
         //}
-        protected override string Expression => "0/2 * * * * ?";
+        protected override string Expression => "* 50 * * * ?";
 
         protected override Task ProcessAsync(CancellationToken cancellationToken)
         {

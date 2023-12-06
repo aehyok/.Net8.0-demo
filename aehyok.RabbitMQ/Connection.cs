@@ -11,14 +11,16 @@ namespace aehyok.RabbitMQ
     /// <summary>
     /// 创建信道
     /// </summary>
-    public class RabbitMQConnection:IRabbitMQConnection
+    public class Connection:IConnection
     {
         private readonly RabbitOptions options;
-        public RabbitMQConnection(IOptions<RabbitOptions> options)
+        
+        // 通过
+        public Connection(IOptions<RabbitOptions> options)
         {
             this.options = options.Value;
         }
-        public IConnection CreateConnection()
+        public global::RabbitMQ.Client.IConnection CreateConnection()
         {
             var factory = new ConnectionFactory
             {

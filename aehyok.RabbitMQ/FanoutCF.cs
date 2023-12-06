@@ -12,8 +12,8 @@ namespace aehyok.RabbitMQ
 {
     public class FanoutCF: ICF
     {
-        private readonly IRabbitMQConnection connection;
-        public FanoutCF(IRabbitMQConnection connection)
+        private readonly IConnection connection;
+        public FanoutCF(IConnection connection)
         {
             this.connection = connection;
         }

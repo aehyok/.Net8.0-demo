@@ -26,19 +26,13 @@ namespace aehyok.Schedules
             {
                 foreach(var type in assembly.GetTypes())
                 {
+                    //判断type是否继承了CronScheduleService类
                     if(type.IsAssignableTo(cronType) && !type.IsAbstract)
                     {
                         services.Add(new ServiceDescriptor(typeof(IHostedService), type, ServiceLifetime.Singleton));
                     }
                 }
             }
-
-
-            //cronServices.ForEach(a =>
-            //{
-            //    services.Add(new ServiceDescriptor(typeof(IHostedService), a, ServiceLifetime.Singleton));
-            //});
-
             return services;
         }
     }

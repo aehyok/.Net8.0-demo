@@ -12,14 +12,12 @@ namespace aehyok.Schedules
 {
     /// <summary>
     /// 实现一个后台服务
-    /// 
     /// </summary>
     public abstract class CronScheduleService: BackgroundService
     {
         /// <summary>
         /// 定时表达式
         /// </summary>
-        //private string Expression = "0/10 * * * * ? ";
         protected abstract string Expression { get; }
 
         public DateTime? GetNextTime()

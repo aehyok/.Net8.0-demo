@@ -2,9 +2,9 @@
 
 namespace aehyok.RabbitMQ
 {
-    public interface IRabbitMQConnection
+    public interface IConnection
     {
-        IConnection CreateConnection();
+        global::RabbitMQ.Client.IConnection CreateConnection();
 
         IModel CreateModel();
     }

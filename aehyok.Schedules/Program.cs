@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using aehyok.RabbitMQ;
+using aehyok.RabbitMQ.EventBus;
+using aehyok.Schedules.Event;
 
 Console.WriteLine("Hello, World!");
 
@@ -16,16 +18,21 @@ builder.Host.InitHost("aehyok.Schedules");
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 
-builder.Services.AddScoped<IRabbitMQConnection, RabbitMQConnection>();
-builder.Services.AddScoped<ICF, FanoutCF>();
-
-var icf = builder.Services.BuildServiceProvider().GetRequiredService<ICF>();
+builder.Services.AddScoped<IConnection, Connection>();
 
 //icf.Subscrber();
 //icf.Publish();
-builder.Services.AddCronServices();
+//builder.Services.AddCronServices();
 
 var app = builder.Build();
+
+app.AddRabbitMQEventBus();
+
+var service = app.Services.GetRequiredService<IEventPublisher>();
+service.Publish(new SelfReportPublishEvent()
+{
+    TaskId = 111111
+});
 
 // 运行主机
 await app.RunAsync();
