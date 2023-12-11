@@ -40,7 +40,7 @@ namespace aehyok.Infrastructure.TypeFinders
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static List<Type> SearchTypes(Type type)
+        public static List<Type> SearchTypes(Type type, bool isInterface = true)
         {
             // 通过aehyok开头的来查找当前使用的程序中的所有程序集
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(item => item.FullName.StartsWith("aehyok.")).ToList();
@@ -51,10 +51,21 @@ namespace aehyok.Infrastructure.TypeFinders
                 {
                     foreach (var handleType in assembly.GetTypes())
                     {
-                        if (IsAssignableToGenericType(handleType, type))
+                        if(isInterface)
                         {
-                            types.Add(handleType);
+                            if (IsAssignableToGenericInterface(handleType, type))
+                            {
+                                types.Add(handleType);
+                            }
+                        } 
+                        else
+                        {
+                            if (IsAssignableToGenericType(handleType, type))
+                            {
+                                types.Add(handleType);
+                            }
                         }
+                        
                     }
                 }
             }
