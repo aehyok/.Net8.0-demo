@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var env = builder.Environment;
 
-builder.Host.InitHost("aehyok.Schedules");
+Thread.CurrentThread.Name = "aehyok.Schedules";
+//builder.Host.InitHost("aehyok.Schedules");
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 
@@ -22,7 +23,7 @@ builder.Services.AddScoped<IConnection, Connection>();
 
 //icf.Subscrber();
 //icf.Publish();
-//builder.Services.AddCronServices();
+builder.Services.AddCronServices();
 
 var app = builder.Build();
 

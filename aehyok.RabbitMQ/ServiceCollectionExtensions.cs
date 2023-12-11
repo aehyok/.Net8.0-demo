@@ -1,4 +1,5 @@
-﻿using aehyok.RabbitMQ.EventBus;
+﻿using aehyok.Infrastructure.TypeFinders;
+using aehyok.RabbitMQ.EventBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,26 +33,32 @@ namespace aehyok.RabbitMQ
         public static IApplicationBuilder AddRabbitMQEventBus(this IApplicationBuilder app)
         {
             var subscriber = app.ApplicationServices.GetRequiredService<IEventSubscriber>();
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(item => item.FullName.StartsWith("aehyok.")).ToList();
-            try
-            {
-                foreach (var assembly in assemblies)
-                {
-                    foreach (var handleType in assembly.GetTypes())
-                    { 
-                        if (IsAssignableToGenericInterface(handleType, typeof(IEventHandler<>)))
-                        {
-                            var eventType = handleType.GetInterfaces().Where(item => item.IsGenericType).SingleOrDefault().GetGenericArguments().SingleOrDefault();
-                            subscriber.Subscribe(eventType, handleType);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            
+            //var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(item => item.FullName.StartsWith("aehyok.")).ToList();
+            //try
+            //{
+            //    foreach (var assembly in assemblies)
+            //    {
+            //        foreach (var handleType in assembly.GetTypes())
+            //        { 
+            //            if (IsAssignableToGenericInterface(handleType, typeof(IEventHandler<>)))
+            //            {
+            //                var eventType = handleType.GetInterfaces().Where(item => item.IsGenericType).SingleOrDefault().GetGenericArguments().SingleOrDefault();
+            //                subscriber.Subscribe(eventType, handleType);
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
 
+            TypeFinders.SearchTypes(typeof(IEventHandler<>)).ForEach(item =>
+            {
+                var eventType = item.GetInterfaces().Where(item => item.IsGenericType).SingleOrDefault().GetGenericArguments().SingleOrDefault();
+                subscriber.Subscribe(eventType, item);
+            });
 
             return app;
         }
