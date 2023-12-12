@@ -16,6 +16,8 @@ using Microsoft.Extensions.Configuration;
 using aehyok.Infrastructure.TypeFinders;
 using aehyok.EntityFramework.Entities;
 using System.Runtime.Loader;
+using aehyok.NCDP.Services;
+using Microsoft.Graph.Groups.Item.Sites.Item.GetApplicableContentTypesForListWithListId;
 
 Console.WriteLine("Hello, World!");
 
@@ -32,6 +34,9 @@ Thread.CurrentThread.Name = "aehyok.Schedules";
 
 builder.Services.AddMysql(builder.Configuration);
 
+builder.Services.AddServices();
+
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddRabbitMQ(builder.Configuration);
 
 builder.Services.AddCronServices();
@@ -46,5 +51,12 @@ service.Publish(new SelfReportPublishEvent()
     TaskId = 111111
 });
 
+var taskService = app.Services.GetRequiredService<ITaskService>();
+var list = await taskService.GetListAsync();
+
+foreach (var item in list)
+{
+    Console.WriteLine(item.Name);
+}
 // 运行主机
 await app.RunAsync();
