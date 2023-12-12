@@ -13,8 +13,8 @@ namespace aehyok.EntityFramework.Mapping
         void ApplyConfiguration(ModelBuilder modelBuilder);
     }
 
-    public interface IMappingConfiguration<TEntity> : IMappingConfiguration where TEntity : class, IEntity
+    public interface IMappingConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>, IMappingConfiguration where TEntity : class, IEntity
     {
-        void ApplyConfiguration(ModelBuilder modelBuilder, TEntity entity);
+
     }
 }
