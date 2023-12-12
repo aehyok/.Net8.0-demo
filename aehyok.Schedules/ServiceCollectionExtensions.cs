@@ -38,7 +38,7 @@ namespace aehyok.Schedules
             //    }
             //}
 
-            foreach (var type in TypeFinders.SearchTypes(cronType, false))
+            foreach (var type in TypeFinders.SearchTypes(cronType, TypeFinders.TypeClassification.Class))
             {
                 services.Add(new ServiceDescriptor(typeof(IHostedService), type, ServiceLifetime.Singleton));
             }

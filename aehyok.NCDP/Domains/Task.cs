@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace aehyok.NCDP.Domains
 {
-    public class Task: AuditedEntity
+    public class Task: Entity
     {
         /// <summary>
         /// 名称

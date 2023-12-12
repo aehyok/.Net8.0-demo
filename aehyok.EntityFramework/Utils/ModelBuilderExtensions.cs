@@ -40,18 +40,23 @@ namespace aehyok.EntityFramework.Utils
             //    }
             //}
 
-            foreach (var type in TypeFinders.SearchTypes(typeof(IMappingConfiguration)))
-            {
-                var mapping = (IMappingConfiguration)Activator.CreateInstance(type);
-                mapping.ApplyConfiguration(builder);
+            //foreach (var type in TypeFinders.SearchTypes(typeof(IMappingConfiguration), TypeFinders.TypeClassification.Interface))
+            //{
+            //    var mapping = (IMappingConfiguration)Activator.CreateInstance(type);
+            //    mapping.ApplyConfiguration(builder);
 
-                var entityType = type.GetTypeInfo().ImplementedInterfaces.First().GetGenericArguments().Single();
-                registedTypes.Add(entityType);
-            }
+            //    var entityType = type.GetTypeInfo().ImplementedInterfaces.First().GetGenericArguments().Single();
+            //    registedTypes.Add(entityType);
+            //}
 
-            var types = TypeFinders.SearchTypes(typeof(TEntity)).Where(modelTypePredicate).Where(a => !registedTypes.Contains(a)).ToList();
+            //.Where(a => !a.IsAbstract && a.IsClass).Where(modelTypePredicate).Where(a => !registedTypes.Contains(a))
+            var types = TypeFinders.SearchTypes(typeof(TEntity), TypeFinders.TypeClassification.Interface).Where(a => !a.IsAbstract && a.IsClass).Where(modelTypePredicate).ToList();
+
+            Console.WriteLine(types.Count);
+            Console.WriteLine("11111");
             foreach (var type in types)
             {
+                Console.WriteLine(type.Name);
                 builder.Entity(type).HasNoDiscriminator();
             }
         }

@@ -54,7 +54,7 @@ namespace aehyok.RabbitMQ
             //    throw ex;
             //}
 
-            TypeFinders.SearchTypes(typeof(IEventHandler<>)).ForEach(item =>
+            TypeFinders.SearchTypes(typeof(IEventHandler<>), TypeFinders.TypeClassification.GenericInterface).ForEach(item =>
             {
                 var eventType = item.GetInterfaces().Where(item => item.IsGenericType).SingleOrDefault().GetGenericArguments().SingleOrDefault();
                 subscriber.Subscribe(eventType, item);

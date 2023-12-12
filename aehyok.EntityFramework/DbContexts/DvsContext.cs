@@ -41,6 +41,7 @@ namespace aehyok.EntityFramework.DbContexts
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            Console.WriteLine("OnModelCreating");
             // 只有继承了IEntity的实体才会被注册到数据库上下文中,并且排除了NotMappedAttribute特性的实体
             modelBuilder.RegisterFromAssembly<IEntity>(a => !a.IsDefined(typeof(NotMappedAttribute), true));
             base.OnModelCreating(modelBuilder);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace aehyok.Infrastructure.TypeFinders
     public static class TypeFinders
     {
         /// <summary>
-        /// 判断给定的类型是否实现了指定的接口
+        /// 判断给定的类型是否实现了指定的泛型接口
         /// </summary>
         /// <param name="givenType"></param>
         /// <param name="genericInterfaceType"></param>
@@ -30,9 +31,40 @@ namespace aehyok.Infrastructure.TypeFinders
             return false;
         }
 
-        public static bool IsAssignableToGenericType(Type givenType, Type genericType)
+
+        /// <summary>
+        /// 判断给定的类型是否实现了指定的泛型接口
+        /// </summary>
+        /// <param name="givenType"></param>
+        /// <param name="genericInterfaceType"></param>
+        /// <returns></returns>
+        public static bool IsAssignableToInterface(Type givenType, Type genericInterfaceType)
+        {
+            var interfaceTypes = givenType.GetInterfaces();
+            foreach (var it in interfaceTypes)
+            {
+                if (it == genericInterfaceType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        public static bool IsAssignableToType(Type givenType, Type genericType)
         {
             return !givenType.IsInterface && !givenType.IsAbstract && givenType.IsAssignableTo(genericType);
+        }
+
+        /// <summary>
+        /// f反射判断的三种类型
+        /// </summary>
+        public enum TypeClassification
+        {
+            Class, // 类
+            Interface, //接口
+            GenericInterface  // 泛型接口
         }
 
         /// <summary>
@@ -40,7 +72,7 @@ namespace aehyok.Infrastructure.TypeFinders
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static List<Type> SearchTypes(Type type, bool isInterface = true)
+        public static List<Type> SearchTypes(Type type, TypeClassification classification)
         {
             // 通过aehyok开头的来查找当前使用的程序中的所有程序集
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(item => item.FullName.StartsWith("aehyok.")).ToList();
@@ -51,21 +83,28 @@ namespace aehyok.Infrastructure.TypeFinders
                 {
                     foreach (var handleType in assembly.GetTypes())
                     {
-                        if(isInterface)
+                        switch (classification)
                         {
-                            if (IsAssignableToGenericInterface(handleType, type))
-                            {
-                                types.Add(handleType);
-                            }
-                        } 
-                        else
-                        {
-                            if (IsAssignableToGenericType(handleType, type))
-                            {
-                                types.Add(handleType);
-                            }
-                        }
-                        
+                            case TypeClassification.Class:
+                                if (IsAssignableToType(handleType, type))
+                                {
+                                    types.Add(handleType);
+                                }
+                                break;
+                            case TypeClassification.Interface:
+                                if (IsAssignableToInterface(handleType, type))
+                                {
+                                    types.Add(handleType);
+                                }
+                                break;
+                            case TypeClassification.GenericInterface:
+                                if (IsAssignableToGenericInterface(handleType, type))
+                                {
+                                    types.Add(handleType);
+                                }
+                                break;
+
+                        }      
                     }
                 }
             }

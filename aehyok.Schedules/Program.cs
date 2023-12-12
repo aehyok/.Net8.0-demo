@@ -13,12 +13,18 @@ using Microsoft.AspNetCore.Http;
 using aehyok.EntityFramework.DbContexts;
 using Microsoft.Graph.Models.ExternalConnectors;
 using Microsoft.Extensions.Configuration;
+using aehyok.Infrastructure.TypeFinders;
+using aehyok.EntityFramework.Entities;
+using System.Runtime.Loader;
 
 Console.WriteLine("Hello, World!");
 
 var builder = WebApplication.CreateBuilder(args);
 
 var env = builder.Environment;
+
+// 例如 aehyok.NCDP 最开始代码中没有使用到，是不会加载到内存中的，所以需要手动加载
+Directory.GetFiles(AppContext.BaseDirectory, "aehyok.*.dll").Select(AssemblyLoadContext.Default.LoadFromAssemblyPath).ToList();
 
 Thread.CurrentThread.Name = "aehyok.Schedules";
 //builder.Host.InitHost("aehyok.Schedules");
