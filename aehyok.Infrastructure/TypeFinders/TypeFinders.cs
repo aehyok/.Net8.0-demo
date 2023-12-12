@@ -31,7 +31,6 @@ namespace aehyok.Infrastructure.TypeFinders
             return false;
         }
 
-
         /// <summary>
         /// 判断给定的类型是否实现了指定的泛型接口
         /// </summary>
@@ -51,14 +50,13 @@ namespace aehyok.Infrastructure.TypeFinders
             return false;
         }
 
-
         public static bool IsAssignableToType(Type givenType, Type genericType)
         {
             return !givenType.IsInterface && !givenType.IsAbstract && givenType.IsAssignableTo(genericType);
         }
 
         /// <summary>
-        /// f反射判断的三种类型
+        /// 反射判断的三种类型
         /// </summary>
         public enum TypeClassification
         {
