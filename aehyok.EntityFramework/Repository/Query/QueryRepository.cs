@@ -11,8 +11,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using X.PagedList;
+using aehyok.EntityFramework.Utils;
 
-namespace aehyok.EntityFramework.Repository
+namespace aehyok.EntityFramework.Repository.Query
 {
     /// <summary>
     ///  参考 https://github.com/TanvirArjel/EFCore.GenericRepository
@@ -32,7 +33,7 @@ namespace aehyok.EntityFramework.Repository
 
         public QueryRepository(DbContext dbContext, ISpecificationEvaluator specificationEvaluator)
         {
-            this.DbContext = dbContext;
+            DbContext = dbContext;
             this.specificationEvaluator = specificationEvaluator;
         }
 
@@ -88,22 +89,22 @@ namespace aehyok.EntityFramework.Repository
 
         public virtual Task<List<TEntity>> GetListAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).ToListAsync(cancellationToken);
+            return ApplySpecification(specification).ToListAsync(cancellationToken);
         }
 
         public virtual Task<List<TResult>> GetListAsync<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).ToListAsync(cancellationToken);
+            return ApplySpecification(specification).ToListAsync(cancellationToken);
         }
 
         public virtual Task<IPagedList<TEntity>> GetPagedListAsync(ISpecification<TEntity> specification, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
+            return ApplySpecification(specification).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
         }
 
         public virtual Task<IPagedList<TResult>> GetPagedListAsync<TResult>(ISpecification<TEntity, TResult> specification, int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
+            return ApplySpecification(specification).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
         }
 
         public virtual Task<TEntity> GetByIdAsync(object id, CancellationToken cancellationToken = default)
@@ -223,7 +224,7 @@ namespace aehyok.EntityFramework.Repository
         {
             ArgumentNullException.ThrowIfNull(condition);
 
-            var query = this.GetQueryable().Where(condition);
+            var query = GetQueryable().Where(condition);
 
             if (includes != null)
             {
@@ -243,50 +244,50 @@ namespace aehyok.EntityFramework.Repository
             ArgumentNullException.ThrowIfNull(condition);
             ArgumentNullException.ThrowIfNull(selectExpression);
 
-            return this.GetQueryable().Where(condition).Select(selectExpression).FirstOrDefaultAsync(cancellationToken);
+            return GetQueryable().Where(condition).Select(selectExpression).FirstOrDefaultAsync(cancellationToken);
         }
 
         public virtual Task<TEntity> GetAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+            return ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
         }
 
         public virtual Task<TResult> GetAsync<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+            return ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
         }
 
         public virtual Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(condition);
-            return this.GetQueryable().Where(condition).AnyAsync(cancellationToken);
+            return GetQueryable().Where(condition).AnyAsync(cancellationToken);
         }
 
         public virtual Task<bool> ExistsAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).AnyAsync(cancellationToken);
+            return ApplySpecification(specification).AnyAsync(cancellationToken);
         }
 
         public virtual Task<int> GetCountAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(condition);
-            return this.GetQueryable().Where(condition).CountAsync(cancellationToken);
+            return GetQueryable().Where(condition).CountAsync(cancellationToken);
         }
 
         public virtual Task<int> GetCountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).CountAsync(cancellationToken);
+            return ApplySpecification(specification).CountAsync(cancellationToken);
         }
 
         public virtual Task<long> GetLongCountAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(condition);
-            return this.GetQueryable().Where(condition).LongCountAsync(cancellationToken);
+            return GetQueryable().Where(condition).LongCountAsync(cancellationToken);
         }
 
         public virtual Task<long> GetLongCountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return this.ApplySpecification(specification).LongCountAsync();
+            return ApplySpecification(specification).LongCountAsync();
         }
 
         public virtual async Task<List<T>> GetFromRawSqlAsync<T>(string sql, CancellationToken cancellationToken = default)
@@ -325,13 +326,13 @@ namespace aehyok.EntityFramework.Repository
         public virtual IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> specification)
         {
             ArgumentNullException.ThrowIfNull(specification);
-            return this.specificationEvaluator.GetQuery(this.GetQueryable(), specification);
+            return specificationEvaluator.GetQuery(GetQueryable(), specification);
         }
 
         public virtual IQueryable<TResult> ApplySpecification<TResult>(ISpecification<TEntity, TResult> specification)
         {
             ArgumentNullException.ThrowIfNull(specification);
-            return this.specificationEvaluator.GetQuery(this.GetQueryable(), specification);
+            return specificationEvaluator.GetQuery(GetQueryable(), specification);
         }
 
         public Task<IPagedList<TEntity>> GetPagedListAsync(int pageIndex = 1,
@@ -342,7 +343,7 @@ namespace aehyok.EntityFramework.Repository
                                                                bool asNoTracking = true,
                                                                CancellationToken cancellationToken = default)
         {
-            var query = this.GetQueryable();
+            var query = GetQueryable();
 
             if (condition != null)
             {
@@ -377,7 +378,7 @@ namespace aehyok.EntityFramework.Repository
                                                                         CancellationToken cancellationToken = default) where TResult : class
         {
             ArgumentNullException.ThrowIfNull(selectExpression);
-            var query = this.GetQueryable();
+            var query = GetQueryable();
 
             if (condition != null)
             {
@@ -406,7 +407,7 @@ namespace aehyok.EntityFramework.Repository
         {
             ArgumentNullException.ThrowIfNull(selectExpression);
 
-            var query = this.GetQueryable();
+            var query = GetQueryable();
 
             if (condition != null)
             {

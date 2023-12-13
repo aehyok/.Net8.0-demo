@@ -1,4 +1,5 @@
 ﻿using aehyok.EntityFramework.Entities;
+using aehyok.EntityFramework.Repository.AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

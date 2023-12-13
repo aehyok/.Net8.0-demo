@@ -8,8 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using aehyok.EntityFramework.Repository.Query;
 
-namespace aehyok.EntityFramework.Repository
+namespace aehyok.EntityFramework.Repository.Base
 {
     public abstract class RepositoryBase<TEntity, TKey> : QueryRepository<TEntity, TKey>, IRepositoryBase<TEntity, TKey> where TEntity : class
     {

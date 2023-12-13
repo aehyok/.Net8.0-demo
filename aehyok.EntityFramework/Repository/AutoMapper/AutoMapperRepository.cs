@@ -14,13 +14,18 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using X.PagedList;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
+using aehyok.EntityFramework.Repository.Base;
 
-namespace aehyok.EntityFramework.Repository
+namespace aehyok.EntityFramework.Repository.AutoMapper
 {
     public abstract class AutoMapperRepository<TEntity, TKey> : RepositoryBase<TEntity, TKey>, IAutoMapperRepository<TEntity, TKey> where TEntity : class
     {
         protected readonly IMapper Mapper;
-        protected readonly AutoMapper.IConfigurationProvider MapperConfig;
+        /// <summary>
+        /// IConfigurationProvider中包含所有定义好的映射关系，通过services.AddAutoMapper()方法注入
+        /// </summary>
+        protected readonly IConfigurationProvider MapperConfig;
 
         protected AutoMapperRepository(DbContext dbContext, IMapper mapper)
             : this(dbContext, mapper, SpecificationEvaluator.Default)
@@ -30,19 +35,19 @@ namespace aehyok.EntityFramework.Repository
         public AutoMapperRepository(DbContext dbContext, IMapper mapper, ISpecificationEvaluator specificationEvaluator)
             : base(dbContext, specificationEvaluator)
         {
-            this.Mapper = mapper;
-            this.MapperConfig = mapper.ConfigurationProvider;
+            Mapper = mapper;
+            MapperConfig = mapper.ConfigurationProvider;
         }
 
         public Task<TProjectedType> GetAsync<TProjectedType>(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken = default) where TProjectedType : class
         {
             ArgumentNullException.ThrowIfNull(condition);
-            return this.GetQueryable().Where(condition).ProjectTo<TProjectedType>(this.MapperConfig).FirstOrDefaultAsync(cancellationToken);
+            return GetQueryable().Where(condition).ProjectTo<TProjectedType>(MapperConfig).FirstOrDefaultAsync(cancellationToken);
         }
 
         public Task<TProjectedType> GetAsync<TProjectedType>(ISpecification<TEntity> specification, CancellationToken cancellationToken = default) where TProjectedType : class
         {
-            return this.ApplySpecification(specification).ProjectTo<TProjectedType>(this.MapperConfig).FirstOrDefaultAsync(cancellationToken);
+            return ApplySpecification(specification).ProjectTo<TProjectedType>(MapperConfig).FirstOrDefaultAsync(cancellationToken);
         }
 
         public Task<TProjectedType> GetByIdAsync<TProjectedType>(TKey id, CancellationToken cancellationToken = default) where TProjectedType : class
@@ -78,7 +83,7 @@ namespace aehyok.EntityFramework.Repository
 
             var query = GetQueryable();
 
-            return query.Where(expressionTree).ProjectTo<TProjectedType>(this.MapperConfig).FirstOrDefaultAsync(cancellationToken);
+            return query.Where(expressionTree).ProjectTo<TProjectedType>(MapperConfig).FirstOrDefaultAsync(cancellationToken);
         }
 
         public Task<List<TProjectedType>> GetListAsync<TProjectedType>(Expression<Func<TEntity, bool>> condition = null,
@@ -109,12 +114,12 @@ namespace aehyok.EntityFramework.Repository
                 query = query.AsNoTracking();
             }
 
-            return query.ProjectTo<TProjectedType>(this.MapperConfig).ToListAsync(cancellationToken);
+            return query.ProjectTo<TProjectedType>(MapperConfig).ToListAsync(cancellationToken);
         }
 
         public Task<List<TProjectedType>> GetListAsync<TProjectedType>(ISpecification<TEntity> specification, CancellationToken cancellationToken = default) where TProjectedType : class
         {
-            return this.ApplySpecification(specification).ProjectTo<TProjectedType>(this.MapperConfig).ToListAsync(cancellationToken);
+            return ApplySpecification(specification).ProjectTo<TProjectedType>(MapperConfig).ToListAsync(cancellationToken);
         }
 
         public Task<IPagedList<TProjectedType>> GetPagedListAsync<TProjectedType>(int pageIndex = 1,
@@ -147,12 +152,12 @@ namespace aehyok.EntityFramework.Repository
                 query = query.AsNoTracking();
             }
 
-            return query.ProjectTo<TProjectedType>(this.MapperConfig).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
+            return query.ProjectTo<TProjectedType>(MapperConfig).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
         }
 
         public Task<IPagedList<TProjectedType>> GetPagedListAsync<TProjectedType>(ISpecification<TEntity> specification, int pageIndex = 1, int pageSize = 10, CancellationToken cancellationToken = default) where TProjectedType : class
         {
-            return this.ApplySpecification(specification).ProjectTo<TProjectedType>(this.MapperConfig).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
+            return ApplySpecification(specification).ProjectTo<TProjectedType>(MapperConfig).ToPagedListAsync(pageIndex, pageSize, null, cancellationToken);
         }
     }
 }

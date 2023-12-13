@@ -24,6 +24,7 @@ namespace aehyok.EntityFramework.Utils
 
             var mappingTypes = TypeFinders.SearchTypes(typeof(IMappingConfiguration), TypeFinders.TypeClassification.Interface).Where(a => !a.IsAbstract && !a.IsInterface);
 
+            // 映射关系
             foreach (var type in mappingTypes)
             {
                 var mapping = (IMappingConfiguration)Activator.CreateInstance(type);
@@ -35,6 +36,7 @@ namespace aehyok.EntityFramework.Utils
 
             var types = TypeFinders.SearchTypes(typeof(TEntity), TypeFinders.TypeClassification.Interface).Where(a => !a.IsAbstract && a.IsClass).Where(modelTypePredicate).ToList();
 
+            // 映射实体
             foreach (var type in types)
             {
                 builder.Entity(type).HasNoDiscriminator();

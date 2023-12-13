@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using X.PagedList;
 
-namespace aehyok.EntityFramework.Repository
+namespace aehyok.EntityFramework.Repository.Query
 {
     /// <summary>
     /// Contains all the query methods. 

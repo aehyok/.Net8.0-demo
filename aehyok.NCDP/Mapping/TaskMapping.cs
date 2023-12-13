@@ -14,6 +14,7 @@ namespace aehyok.NCDP.Mapping
         public override void Configure(EntityTypeBuilder<Task> builder)
         {
             base.Configure(builder);
+            builder.Property(a => a.Name).HasMaxLength(50).IsRequired();
         }
     }
 }
